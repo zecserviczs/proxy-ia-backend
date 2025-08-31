@@ -1,0 +1,37 @@
+spring:
+  profiles:
+    active: aws
+  datasource:
+    url: jdbc:postgresql://${DB_HOST:localhost}:${DB_PORT:5432}/${DB_NAME:commerce_proxi_ia_local}
+    username: ${DB_USERNAME:postgres}
+    password: ${DB_PASSWORD:password}
+    driver-class-name: org.postgresql.Driver
+  jpa:
+    hibernate:
+      ddl-auto: update
+    properties:
+      hibernate:
+        dialect: org.hibernate.dialect.PostgreSQLDialect
+        format_sql: true
+    show-sql: false
+  flyway:
+    enabled: true
+    locations: classpath:db/migration
+    baseline-on-migrate: true
+
+server:
+  port: 8080
+
+management:
+  endpoints:
+    web:
+      exposure:
+        include: health,info,metrics
+  endpoint:
+    health:
+      show-details: always
+
+aws:
+  region: ${AWS_REGION:eu-west-1}
+  access-key-id: ${AWS_ACCESS_KEY_ID:dummy}
+  secret-access-key: ${AWS_SECRET_ACCESS_KEY:dummy}
