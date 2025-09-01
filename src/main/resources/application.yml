@@ -35,3 +35,14 @@ aws:
   region: ${AWS_REGION:eu-west-1}
   access-key-id: ${AWS_ACCESS_KEY_ID:dummy}
   secret-access-key: ${AWS_SECRET_ACCESS_KEY:dummy}
+
+# Configuration Swagger/OpenAPI
+springdoc:
+  api-docs:
+    path: /api-docs
+  swagger-ui:
+    path: /swagger-ui.html
+    operationsSorter: method
+    tagsSorter: alpha
+    docExpansion: none
+  packages-to-scan: com.commerce.proxiia.api

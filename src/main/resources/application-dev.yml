@@ -1,0 +1,194 @@
+# Configuration pour l'environnement de développement
+spring:
+  profiles:
+    active: dev
+  
+  # Configuration de la base de données
+  datasource:
+    url: jdbc:postgresql://localhost:5432/proxi_ia_db
+    username: proxi_ia_user
+    password: proxi_ia_password
+    driver-class-name: org.postgresql.Driver
+  
+  # Configuration JPA/Hibernate
+  jpa:
+    hibernate:
+      ddl-auto: validate
+    show-sql: true
+    properties:
+      hibernate:
+        format_sql: true
+        use_sql_comments: true
+        jdbc:
+          batch_size: 20
+        order_inserts: true
+        order_updates: true
+  
+  # Configuration Flyway
+  flyway:
+    enabled: true
+    locations: classpath:db/migration
+    baseline-on-migrate: true
+    validate-on-migrate: true
+  
+  # Configuration des logs
+  logging:
+    level:
+      com.commerce.proxiia: DEBUG
+      org.springframework.web: DEBUG
+      org.hibernate.SQL: DEBUG
+      org.hibernate.type.descriptor.sql.BasicBinder: TRACE
+  
+  # Configuration Jackson
+  jackson:
+    default-property-inclusion: non_null
+    serialization:
+      write-dates-as-timestamps: false
+      fail-on-empty-beans: false
+    deserialization:
+      fail-on-unknown-properties: false
+
+# Configuration du serveur
+server:
+  port: 8080
+  servlet:
+    context-path: /
+  compression:
+    enabled: true
+    mime-types: text/html,text/xml,text/plain,text/css,text/javascript,application/javascript,application/json
+    min-response-size: 1024
+
+# Configuration de l'application
+app:
+  name: Proxi-IA Commerce
+  version: 1.0.0
+  environment: development
+  
+  # Configuration de la sécurité
+  security:
+    jwt:
+      secret: dev-secret-key-change-in-production
+      expiration: 86400000 # 24 heures
+  
+  # Configuration des CORS
+  cors:
+    allowed-origins: 
+      - http://localhost:4200
+      - http://localhost:4201
+      - http://localhost:3000
+    allowed-methods:
+      - GET
+      - POST
+      - PUT
+      - DELETE
+      - PATCH
+      - OPTIONS
+    allowed-headers:
+      - "*"
+    allow-credentials: true
+    max-age: 3600
+  
+  # Configuration des notifications
+  notifications:
+    email:
+      enabled: false
+      from: noreply@proxi-ia.com
+    sms:
+      enabled: false
+    push:
+      enabled: false
+  
+  # Configuration de l'IA
+  ai:
+    enabled: true
+    model: gpt-4
+    temperature: 0.7
+    max-tokens: 1000
+    timeout: 30000
+  
+  # Configuration du cache
+  cache:
+    redis:
+      enabled: false
+      host: localhost
+      port: 6379
+      password: ""
+      database: 0
+      timeout: 2000
+  
+  # Configuration des rapports
+  reporting:
+    enabled: true
+    format: pdf,excel
+    storage: local
+    retention-days: 90
+  
+  # Configuration de la surveillance
+  monitoring:
+    enabled: true
+    metrics:
+      enabled: true
+      export:
+        prometheus:
+          enabled: true
+    health:
+      enabled: true
+      show-details: always
+    info:
+      enabled: true
+
+# Configuration Actuator
+management:
+  endpoints:
+    web:
+      exposure:
+        include: health,info,metrics,prometheus
+      base-path: /actuator
+  endpoint:
+    health:
+      show-details: always
+      show-components: always
+    info:
+      enabled: true
+  info:
+    env:
+      enabled: true
+    git:
+      mode: full
+    build:
+      enabled: true
+
+# Configuration Swagger/OpenAPI
+springdoc:
+  api-docs:
+    path: /v3/api-docs
+  swagger-ui:
+    path: /swagger-ui.html
+    operations-sorter: method
+    tags-sorter: alpha
+  info:
+    title: Proxi-IA Commerce API
+    description: API complète pour la plateforme e-commerce Proxi-IA
+    version: 1.0.0
+    contact:
+      name: Proxi-IA Team
+      email: dev@proxi-ia.com
+      url: https://proxi-ia.com
+  servers:
+    - url: http://localhost:8080
+      description: Serveur de développement
+
+# Configuration des logs
+logging:
+  pattern:
+    console: "%d{yyyy-MM-dd HH:mm:ss} [%thread] %-5level %logger{36} - %msg%n"
+    file: "%d{yyyy-MM-dd HH:mm:ss} [%thread] %-5level %logger{36} - %msg%n"
+  file:
+    name: logs/proxi-ia-backend.log
+    max-size: 10MB
+    max-history: 30
+  level:
+    root: INFO
+    com.commerce.proxiia: DEBUG
+    org.springframework: INFO
+    org.hibernate: INFO
